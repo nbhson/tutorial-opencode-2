@@ -5,7 +5,7 @@
 > **Đọc xong:** tự cài + nâng cấp v1→v2 an toàn, chọn đúng bề mặt (TUI/Desktop/Web/CLI non-interactive), cấu hình model + permissions + agents + skills + MCP đúng chuẩn v2, và có lộ trình 5 ngày lên pro.
 > **Thời gian:** ~5 phút trang này; học đủ khóa là 5 ngày.
 
-Bộ tài liệu tiếng Việt deep-dive về **OpenCode 2 (verify 16/10/2026 với `opencode.ai/v2/docs`, announcement 2.0 ngày 12/10/2026, npm `@opencode/cli` 2.0.29)**.
+Bộ tài liệu tiếng Việt deep-dive về **OpenCode 2 (verify lần đầu 16/10/2026 với `opencode.ai/v2/docs`, announcement 2.0 ngày 12/10/2026, npm `@opencode/cli` 2.0.29; cập nhật 27/10/2026: npm latest là `@opencode/cli` 2.2.0)**.
 Nguồn tổng hợp: docs v2 chính thức (config/agents/permissions/MCP/skills/plugins/models), migration guide v1→v2, changelog, và kinh nghiệm thực chiến terminal-agent.
 
 ## Cho ai đọc?
@@ -20,13 +20,13 @@ Nguồn tổng hợp: docs v2 chính thức (config/agents/permissions/MCP/skill
 
 | Folder | Nội dung (nói thẳng) | Số bài |
 |---|---|---|
-| [`01-huong-dan-su-dung/`](./01-huong-dan-su-dung/) | **Hướng dẫn sử dụng**: tổng quan, cài đặt + upgrade v1→v2, TUI/Desktop/Web/CLI, config `opencode.jsonc`, models + Zen/Go/BYOK, agents, commands, skills, MCP + Code Mode, permissions + policies, background tasks, sessions, plugins + SDK/API, worktree + Git | 15 bài + commands/ (13 lệnh) |
+| [`01-huong-dan-su-dung/`](./01-huong-dan-su-dung/) | **Hướng dẫn sử dụng**: tổng quan, cài đặt + upgrade v1→v2, TUI/Desktop/Web/CLI, config `opencode.jsonc`, models + Zen/Go/BYOK, agents, commands, skills, MCP + Code Mode, permissions + policies, background tasks, sessions, plugins + SDK/API, worktree + Git, themes + keybinds, formatters + LSP + tools, CI/CD, rules + AGENTS.md | 19 bài + commands/ (13 lệnh) |
 | [`02-tips-thuc-chien/`](./02-tips-thuc-chien/) | **Tips thực chiến**: AGENTS.md hygiene, prompt + Plan-first, verification, parallel background, Code Mode hiệu quả, tiết kiệm tiền model, teamwork | 7 bài deep-dive |
 | [`03-cau-hoi-thuong-gap/`](./03-cau-hoi-thuong-gap/) | **Q&A thường gặp**: cài đặt & upgrade, model & pricing, permissions, MCP + Code Mode, agents & skills, plugins & API, lỗi & troubleshooting, bảo mật | 8 bài deep-dive |
 | [`templates/`](./templates/) | Template copy-paste: `opencode.jsonc`, `AGENTS.md`, `agents/`, `commands/`, `skills/`, MCP, plugin stub | copy-paste dùng ngay |
 | [`CHEATSHEET.md`](./CHEATSHEET.md) | Bảng tra nhanh CLI, TUI keys, slash commands, config keys, permissions, MCP | 1 trang |
 
-> **Đọc bảng này thế nào:** `01-` là "học nghề" (đọc tuần tự 00 → 14), `02-` là "lên trình" (thói quen thực chiến), `03-` là "tủ thuốc" (tra khi kẹt), `templates/` là bộ khung copy vào repo thật. Tuần đầu chỉ cần `01-` + `CHEATSHEET.md`.
+> **Đọc bảng này thế nào:** `01-` là "học nghề" (đọc tuần tự 00 → 18), `02-` là "lên trình" (thói quen thực chiến), `03-` là "tủ thuốc" (tra khi kẹt), `templates/` là bộ khung copy vào repo thật. Tuần đầu chỉ cần `01-` + `CHEATSHEET.md`.
 
 ## Lộ trình học đề xuất (5 ngày)
 
@@ -87,7 +87,7 @@ Quy tắc vàng (nhớ 4 câu này là đủ 80% sức mạnh):
 
 ## Phiên bản & nguồn
 
-- OpenCode **2.0** (2.0.0 publish 11/09/2026; verify ở 2.0.29–2.0.30 ngày 14–15/10/2026). Xem version: `opencode --version`.
+- OpenCode **2.0** (2.0.0 publish 11/09/2026). **Cập nhật 27/10/2026:** dòng v2 đã lên **2.2.0** (27/10/2026) — v2.1.0 (20/10: Todo list TUI qua `experimental.todo`, persistent terminals Windows), v2.1.4 (23/10: MCP Input Forms hiện form khi server hỏi input thay vì timeout; `experimental.background_compaction`), v2.2.0 (27/10: Desktop plugins experimental, image/decision generation APIs trong plugin/SDK, **3 breaking changes: `@opencode/ai` root thành Promise API — Effect API chuyển sang `@opencode/ai/effect`; OpenCode GitHub Action bị bỏ; TUI plugins cần OpenTUI 0.7**). Xem version: `opencode --version`. Dòng 1.x mới nhất: 1.19.4 (22/10/2026).
 - Docs gốc v2: https://opencode.ai/v2/docs — Announcement 2.0 (12/10/2026): https://anoma.ly/notes/opencode-2-0/ — Migrate v1: https://opencode.ai/v2/docs/migrate-v1/
 - Zen models + pricing: https://opencode.ai/zen — Console/Go: https://opencode.ai/v2/docs/console/go
 - **Snapshot sự kiện 16/10/2026 (đã verify):**

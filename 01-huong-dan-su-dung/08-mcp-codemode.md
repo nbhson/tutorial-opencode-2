@@ -25,6 +25,23 @@ opencode mcp add everything --env LOG_LEVEL=info -- npx -y @modelcontextprotocol
 
 Global cho mọi project: thêm `--global`.
 
+### 1.1. MCP servers phổ biến đáng cắm (cập nhật 10/2026)
+
+Danh sách server được cộng đồng dùng nhiều nhất 2025–2026 (nguồn: [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers), docs từng vendor):
+
+| Server | Loại | Dùng khi nào |
+|---|---|---|
+| `context7` | remote | Tra docs thư viện mới nhất (chống hallucinate API cũ) |
+| `github` (`@github/github-mcp-server` official) | remote/local | Issues/PRs/code search/review không rời terminal |
+| `playwright` (`@playwright/mcp` chính chủ Microsoft) | local (stdio) | Agent tự drive browser: E2E, screenshot, debug UI |
+| `chrome-devtools` | local | Profiling, console, network trace trong Chrome |
+| `sentry` | remote | Đọc lỗi production, stacktrace, release health |
+| `figma` (plugin + MCP chính chủ) | remote/plugin | Đọc design tokens/component specs → code |
+| `postgres`/`database` servers | local | Query DB read-only khi debug data |
+| `notion` / `linear` / `slack` | remote | Workflow docs/ticket vào agent loop |
+
+Lưu ý chọn lọc: chỉ add server task đó cần — thêm 5–6 server phổ biến trên vẫn nhẹ nhờ Code Mode, nhưng đừng add "cho có".
+
 ### 2. Config tay (`mcp.servers`)
 
 ```jsonc

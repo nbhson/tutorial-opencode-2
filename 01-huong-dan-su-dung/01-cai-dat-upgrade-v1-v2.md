@@ -4,7 +4,7 @@
 
 ## Mục tiêu bài học
 
-- Cài fresh v2 bằng 1 trong 3 kênh chính, verify `2.0.x`.
+- Cài fresh v2 bằng 1 trong 3 kênh chính, verify `2.2.x`.
 - Upgrade từ latest 1.x bằng `upgrade --major` đúng thứ tự.
 - Kể được 3 breaking + phần nào tương thích ngược.
 
@@ -34,11 +34,11 @@ npm install -g @opencode/cli
 winget install --id Anomaly.OpenCode -e
 ```
 
-Verify (giữa 10/2026 phải thấy 2.0.29+):
+Verify (từ 27/10/2026 phải thấy 2.2.0+):
 
 ```bash
 opencode --version
-# -> 2.0.x
+# -> 2.2.0 (hoặc mới hơn)
 ```
 
 Standalone binary (máy không có package manager): tải zip/tar theo platform ở trang docs (darwin-arm64/x64, windows-arm64/x64, linux glibc/musl). Docker: `ghcr.io/anomalyco/opencode:2.0.0` (tag theo version).
@@ -59,7 +59,7 @@ opencode
 opencode upgrade --major
 
 # 3. verify
-opencode --version   # 2.0.x
+opencode --version   # 2.2.0+ (10/2026)
 opencode mcp list    # models/credentials/agents/permissions/MCP con du khong
 ```
 

@@ -12,7 +12,7 @@
 | Cài v2 (brew) | `brew install anomalyco/tap/opencode-v2` |
 | Cài v2 (npm) | `npm install -g @opencode/cli` |
 | Cài Desktop / WinGet | dmg/deb/rpm/AppImage ở `opencode.ai/v2/docs` · `winget install --id Anomaly.OpenCode -e` |
-| Check version | `opencode --version` → phải là `2.0.x` (2.0.29+ giữa 10/2026) |
+| Check version | `opencode --version` → phải là `2.2.x` trở lên (latest 2.2.0 — 27/10/2026) |
 | Upgrade v1→v2 | lên latest 1.x rồi `opencode upgrade --major` (xóa bản package-manager v1 trước vì chung lệnh `opencode`) |
 | Xem có gì mới | mở TUI → `/highlights` (tắt auto: `"highlights": false` trong `cli.json`) |
 

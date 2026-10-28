@@ -8,4 +8,6 @@
 | `AGENTS.md` | `<project>/AGENTS.md` |
 | `.opencode/agents/reviewer.md` | `<project>/.opencode/agents/reviewer.md` |
 | `.opencode/commands/review.md` | `<project>/.opencode/commands/review.md` |
+| `.opencode/commands/task.md` | `<project>/.opencode/commands/task.md` |
 | `.opencode/skills/review-pr/SKILL.md` | `<project>/.opencode/skills/review-pr/SKILL.md` |
+| `.opencode/plugins/stub.ts` | `<project>/.opencode/plugins/stub.ts` |

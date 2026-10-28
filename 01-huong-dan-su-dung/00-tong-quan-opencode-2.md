@@ -129,7 +129,7 @@ opencode run --model anthropic/claude-sonnet-4-5 "Review repo for correctness, l
 
 ## 7. Bài tập nhỏ
 
-1. (5 phút) `opencode --version` → xác nhận `2.0.x`. Mở TUI, gõ `/highlights` đọc changelog v2.
+1. (5 phút) `opencode --version` → xác nhận `2.2.x`. Mở TUI, gõ `/highlights` đọc changelog v2.
 2. (5 phút) `Ctrl+X M` đổi model, `Shift+Tab` đổi agent, `Ctrl+P` mở palette — sờ 3 phím này cho thuộc tay.
 3. (10 phút) Chạy `opencode run "giai thich repo nay trong 5 gach dau dong"` từ ngoài TUI, so với hỏi trong TUI — cảm nhận khác biệt non-interactive.
 

@@ -1,32 +1,220 @@
+// opencode.jsonc — cau hinh OpenCode v2 cho project
+// Copy sang <project>/opencode.jsonc roi sua cho khop
+// Tat ca secrets qua {env:NAME}, khong hardcode
+// Reference: https://opencode.ai/v2/docs/config/ (verify 28/10/2026, v2.2.0)
+
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "anthropic/claude-sonnet-4-5",
-  "small_model": "anthropic/claude-haiku-4-5",
-  "default_agent": "build",
+
+  // --- Model ---
+  // Model mac dinh cho moi session (provider/model, khong co #variant o day)
+  // Thay bang model thuc te cua team: opencode models --query <ten> de tim
+  // Hoac dat {env:OPENCODE_MODEL} roi do env variable nap vao day
+  "model": "anthropic/claude-sonnet-5-5",
+
+  // Small model cho cac tac vu nho: tao tieu de session, tu dong compact
+  // Deprecated trong config nhung van hoat — co the bi xoa o phien ban sau
+  // Neu khong can thi bo comment di
+  "small_model": "anthropic/claude-haiku-4",
+
+  // --- Permissions (tra tu dong) ---
+  // Cac quy tac kiem soat agent duoc lam gi
+  // Quy tac cuoi cung matching quyet dinh ket qua
+  // Reference: https://opencode.ai/v2/docs/permissions/
   "permissions": [
+    // Mac dinh: hoitruoc moi shell command
     { "action": "shell", "resource": "*", "effect": "ask" },
+
+    // Cac lenh doc chi: git status, git diff, git log — thuong xuyen, cho phep ngay
     { "action": "shell", "resource": "git status *", "effect": "allow" },
     { "action": "shell", "resource": "git diff *", "effect": "allow" },
+    { "action": "shell", "resource": "git log *", "effect": "allow" },
+
+    // Cam nguy hiem: push, xoa file, sudo, docker system prune
     { "action": "shell", "resource": "git push *", "effect": "deny" },
-    { "action": "read", "resource": "*.env", "effect": "deny" },
-    { "action": "skill", "resource": "*", "effect": "allow" }
+    { "action": "shell", "resource": "rm -rf *", "effect": "deny" },
+    { "action": "shell", "resource": "sudo *", "effect": "deny" },
+    { "action": "shell", "resource": "docker system prune *", "effect": "deny" },
+    { "action": "shell", "resource": "dropdb *", "effect": "deny" },
+
+    // Khong cho doc .env (da co trong base policy, nhung ghi lai de ro rang)
+    { "action": "read", "resource": "*.env", "effect": "ask" },
+    { "action": "read", "resource": "*.env.*", "effect": "ask" },
+    // Cho phep .env.example (khong chua secret)
+    { "action": "read", "resource": "*.env.example", "effect": "allow" },
+
+    // Cho phep trich xuat file Markdown / JSON / YAML thong thuong
+    { "action": "read", "resource": "*.md", "effect": "allow" },
+    { "action": "read", "resource": "*.json", "effect": "allow" },
+    { "action": "read", "resource": "*.yaml", "effect": "allow" },
+    { "action": "read", "resource": "*.yml", "effect": "allow" }
   ],
-  "policies": [{ "action": "tool.use", "resource": "shell:sudo *", "effect": "deny" }],
+
+  // --- Policies (hard-deny, uu tien cao hon permissions) ---
+  // Reference: https://opencode.ai/v2/docs/policies/
+  "policies": [
+    // Chan plugin MCP khong duoc phep tu dong them server
+    { "action": "integration.use", "resource": "opencode.mcp.*", "effect": "deny" },
+    // Chi cho phep provider duoc cau hinh san trong config
+    { "action": "provider.use", "resource": "*", "effect": "deny" },
+    { "action": "provider.use", "resource": "anthropic", "effect": "allow" }
+  ],
+
+  // --- MCP Servers ---
+  // Cau hinh MCP server — local (chay lenh) hoac remote (HTTP)
+  // Reference: https://opencode.ai/v2/docs/mcp-servers/
   "mcp": {
+    // Timeout mac dinh cho tat ca server (ms)
+    // "timeout": { "startup": 30000, "catalog": 15000, "execution": 60000 },
+
     "servers": {
-      "context7": { "type": "remote", "url": "https://mcp.context7.com/mcp" }
+      // Vi du MCP local: Playwright cho browser automation
+      // "playwright": {
+      //   "type": "local",
+      //   "command": ["bunx", "@playwright/mcp"],
+      //   // Thu muc lam viec mac dinh cho process MCP
+      //   // "cwd": "/path/to/project",
+      //   // Bien moi truong truyen vao process MCP
+      //   // "environment": { "DEBUG": "1" },
+      //   // Code Mode: cho phep goi tool MCP trong Code Mode (mac dinh: false)
+      //   "codemode": false,
+      //   // Timeout rieng cho server nay (override global)
+      //   // "timeout": { "execution": 30000 }
+      // },
+
+      // Vi du MCP remote: server tra ve tool qua HTTP
+      // "docs-mcp": {
+      //   "type": "remote",
+      //   "url": "https://mcp.example.com",
+      //   // Headers gui kem moi request — dung {env:NAME} cho secret
+      //   "headers": {
+      //     "Authorization": "Bearer {env:DOCS_MCP_TOKEN}",
+      //     "X-Team-ID": "engineering"
+      //   },
+      //   // Code Mode: cho phep goi tool MCP trong Code Mode (mac dinh: false)
+      //   "codemode": false,
+      //   // Timeout rieng cho server nay
+      //   // "timeout": { "catalog": 10000, "execution": 45000 }
+      // }
     }
   },
-  "agents": {
-    "reviewer": {
-      "description": "Reviews changes without editing",
-      "mode": "subagent",
-      "permissions": [
-        { "action": "edit", "resource": "*", "effect": "deny" },
-        { "action": "shell", "resource": "*", "effect": "deny" }
-      ]
-    }
+
+  // --- Compaction (tu dong compact context) ---
+  // Reference: https://opencode.ai/v2/docs/compaction/
+  "compaction": {
+    // Tu dong compact khi context day (mac dinh: true)
+    "auto": true,
+    // Bao nhieu tokens giu lai sau compaction (phan duoi cung cua cuoc tro chuyen)
+    "keep": {
+      "tokens": 15000
+    },
+    // Buffer tokens de tranh overflow trong luc compact (neu provider ho tro)
+    // Khong nen dat cao hon 2x keep.tokens
+    "buffer": 20000
   },
-  "skills": ["./team-skills"],
-  "plugins": []
+
+  // --- Experimental (tinh nang dang thu nghiem) ---
+  // Reference: https://opencode.ai/v2/docs/config/#experimental
+  "experimental": {
+    // Tao tool todowrite de agent theo doi task nhieu buoc
+    // "todo": true,
+    // Do sau toi da cua subagent (mac dinh: 1, subagent khong the goi subagent tiep)
+    // "subagent_depth": 2,
+    // Scanner shell di chuyen (thay the tree-sitter, mac dinh: false)
+    // "portable_shell_scanner": true,
+    // Ghi compaction summary background (tranh pause khi compact, mac dinh: false)
+    // "background_compaction": true,
+    // Bao lau location duoc giu warm khi khong co session (mac dinh: "60 minutes")
+    // "location_idle_timeout": "4 hours"
+  },
+
+  // --- Warming (giu session warm voi transient request) ---
+  // Mac dinh: false (tat)
+  // Chi bat khi muon trai nghiem nhanh chong (co chi phi API)
+  // Reference: https://opencode.ai/v2/docs/warming/
+  // "warming": {
+  //   "prompt": "Do not perform any work. Reply with exactly: OK",
+  //   "interval": "4 minutes",
+  //   "duration": "30 minutes"
+  // },
+
+  // --- Update ---
+  // "notify" = hoi truoc khi cai; "auto" = tu dong cai; "disable" = bo qua
+  // "update": "notify",
+
+  // --- Shell ---
+  // Shell dung cho terminal va shell tool (mac dinh: /bin/zsh tren macOS)
+  // "shell": "/bin/zsh",
+
+  // --- Agents (custom agents) ---
+  // Override hoac dinh nghia agents tuy chinh
+  // Reference: https://opencode.ai/v2/docs/agents/
+  // "agents": {
+  //   "reviewer": {
+  //     "description": "Review code without editing",
+  //     "mode": "subagent",
+  //     "system": "Focus on correctness, security, and missing tests.",
+  //     "permissions": [
+  //       { "action": "edit", "resource": "*", "effect": "deny" },
+  //       { "action": "shell", "resource": "*", "effect": "deny" }
+  //     ]
+  //   }
+  // },
+
+  // --- Commands (inline command templates) ---
+  // Tuy nhien, cac command .md trong .opencode/commands/ duoc discover tu dong
+  // Reference: https://opencode.ai/v2/docs/commands/
+  // "commands": {
+  //   "audit": {
+  //     "template": "Audit $ARGUMENTS.",
+  //     "description": "Audit a package for security issues",
+  //     "agent": "general",
+  //     "subagent": true
+  //   }
+  // },
+
+  // --- Formatter ---
+  // Tu dong format file sau khi write/edit/patch (mac dinh: false)
+  // "formatter": true,
+
+  // --- Skills ---
+  // Thu muc them de discover skills
+  // "skills": ["./team-skills", "https://example.com/.well-known/skills/"],
+
+  // --- Instructions ---
+  // File huong dan them (load cung AGENTS.md)
+  // "instructions": ["CONTRIBUTING.md", "docs/guidelines/*.md"],
+
+  // --- Worktree ---
+  // Thu muc chua worktree moi (relative to project checkout)
+  // "worktree": { "directory": ".lane/trees" },
+
+  // --- Plugins ---
+  // Plugin packages hoac local directories
+  // Reference: https://opencode.ai/v2/docs/plugins/
+  // "plugins": [
+  //   "opencode-acme-plugin",
+  //   { "package": "./plugins/company", "options": { "strict": true } }
+  // ],
+
+  // --- Media (xu ly hinh anh qua kich thuoc) ---
+  // Reference: https://opencode.ai/v2/docs/attachments/
+  // "media": {
+  //   "image": {
+  //     "auto_resize": true,
+  //     "max_width": 2000,
+  //     "max_height": 2000,
+  //     "max_base64_bytes": 5242880
+  //   }
+  // },
+
+  // --- Tool Output ---
+  // Gioi han output tu tool
+  // "tool_output": {
+  //   "max_lines": 2000,
+  //   "max_bytes": 51200
+  // },
+
+  // --- Websearch ---
+  // "websearch": { "provider": "random" }
 }

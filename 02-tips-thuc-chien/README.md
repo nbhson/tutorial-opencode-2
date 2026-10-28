@@ -1,7 +1,7 @@
 # 02 — Tips thực chiến OpenCode 2 (thói quen của dân pro)
 
 > **Dành cho:** người đã chạy được OpenCode 2 · **Đọc xong:** 7 thói quen giúp nhanh hơn + rẻ hơn + ít gãy hơn.
-> **Thời gian:** ~5 phút trang này; mỗi tips ~10 phút.
+> **Thời gian:** ~5 phút trang này; mỗi tips ~10–15 phút (gồm walkthrough theo phút + bài tập có tiêu chí đạt).
 
 | # | Tips | 1 dòng | Link |
 |---|---|---|---|

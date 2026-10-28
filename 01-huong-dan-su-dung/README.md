@@ -1,15 +1,15 @@
-# 01 — Hướng dẫn sử dụng OpenCode 2 (đọc từ 00 → 14)
+# 01 — Hướng dẫn sử dụng OpenCode 2 (đọc từ 00 → 18)
 
 > **Dành cho:** người mới + dev v1 muốn migrate đúng thứ tự.
-> **Vấn đề:** 15 bài — đọc cái nào trước, bài nào liên quan việc đang làm.
-> **Đọc xong:** biết thứ tự 00 → 14 và tra đúng bài khi kẹt.
+> **Vấn đề:** 19 bài — đọc cái nào trước, bài nào liên quan việc đang làm.
+> **Đọc xong:** biết thứ tự 00 → 18 và tra đúng bài khi kẹt.
 > **Thời gian:** ~5 phút.
 
-Nhóm "học nghề": 15 bài xếp liền mạch từ **tổng quan → cài đặt → bề mặt → config nền (model/agents/commands/skills/MCP/permissions) → vận hành nâng cao (background, sessions, plugins/SDK, worktree, IDE)**.
+Nhóm "học nghề": 19 bài xếp liền mạch từ **tổng quan → cài đặt → bề mặt → config nền (model/agents/commands/skills/MCP/permissions) → vận hành nâng cao (background, sessions, plugins/SDK, worktree, IDE) → cá nhân hóa + vận hành (themes/keybinds, formatters/tools/LSP, CI/CD, rules)**.
 
 Cách học nhanh: đọc 4 bài đầu (**00–03**), rồi vừa đọc vừa mở TUI làm theo — ví dụ đọc bài 05 thì `Shift+Tab` đổi agent thật, đọc bài 08 thì `opencode mcp add` thật.
 
-## Danh sách bài (15 bài)
+## Danh sách bài (19 bài)
 
 | # | Tên bài | Mô tả 1 dòng | Link |
 |---|---|---|---|
@@ -28,6 +28,10 @@ Cách học nhanh: đọc 4 bài đầu (**00–03**), rồi vừa đọc vừa 
 | 12 | Plugins + SDK + API | Plugin API mới (v1 không chạy), `@opencode/client`, `@opencode/sdk` | [12](./12-plugins-sdk-api.md) |
 | 13 | Code Mode scripting | Agent viết script JS gọi gộp MCP/OpenAPI 1 round-trip | [13](./13-codemode-scripting.md) |
 | 14 | Worktree + Git + IDE/ACP | `worktree_*` trong Code Mode, `AGENTS.md`, ACP cho editor | [14](./14-worktree-git-ide-acp.md) |
+| 15 | Themes + Keybinds | `cli.json`, `/themes`, leader key, phím soạn input kiểu Readline/Emacs | [15](./15-themes-keybinds.md) |
+| 16 | Formatters + LSP + Tools | `formatter: true`, vì sao v2 không chạy LSP, bản đồ built-in tools | [16](./16-formatters-lsp-tools.md) |
+| 17 | CI/CD: GitHub + GitLab | `opencode run --standalone` trong pipeline, secrets qua env, GitHub Action đã bị bỏ ở 2.2.0 | [17](./17-cicd-github-gitlab.md) |
+| 18 | `/init` + Rules + `AGENTS.md` | Sinh luật dự án, nested `AGENTS.md` cho monorepo, `instructions[]` | [18](./18-init-rules-agents-md.md) |
 
 ## Tra cứu lệnh chi tiết (`commands/`)
 

@@ -9,7 +9,7 @@ Cảm ơn bạn muốn đóng góp! Repo này là tài liệu tiếng Việt, m�
 
 - Đặt tên: số tiếp theo + slug tiếng Việt không dấu, vd `15-acp-editor-integration.md`.
 - Độ dài: 250–450 dòng. Bắt buộc: mục lục, mạch why → how → ví dụ copy-paste → pitfalls ❌/✅ → bài tập (có thời gian) → link chéo (≥3, đường dẫn tương đối).
-- Code block phải chạy được trên OpenCode 2.0.x (ghi version đã verify trong PR). Secrets luôn qua `{env:NAME}`, không hardcode.
+- Code block phải chạy được trên OpenCode 2.2.x trở lên (ghi version đã verify trong PR). Secrets luôn qua `{env:NAME}`, không hardcode.
 
 ### Bài trong `02-tips-thuc-chien/` / `03-cau-hoi-thuong-gap/`
 
