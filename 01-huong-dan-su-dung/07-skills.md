@@ -171,9 +171,7 @@ Frontmatter điều khiển:
 | `ask` | Vẫn quảng cáo, nhưng nạp phải hỏi |
 | `deny` | **Giấu khỏi model + chặn nạp** |
 
-Rule theo thứ tự, **khớp cuối thắng**. Đặt cùng bộ rule dưới `agents.<id>.permissions` để chỉ áp cho 1 agent. Toàn bộ `policies` `integration.use` với `skill:<id>` cũng chặn được skill ở tầng cứng hơn — xem [09-permissions-policies.md](09-permissions-policies.md).
-
-| `deny` | Giấu skill khỏi model + từ chối nạp |
+Rule theo thứ tự, **khớp cuối thắng**. Đặt cùng bộ rule dưới `agents.<id>.permissions` để chỉ áp cho 1 agent. Chặn skill ở tầng cứng hơn thì dùng policy `skill.use` với resource là skill ID (từ v2.2.3 — trước đây gộp chung `integration.use` với prefix `skill:`, rule cũ được convert tự động) — xem [09-permissions-policies.md](09-permissions-policies.md).
 
 **Vì sao quan trọng?** Bạn muốn team chỉ dùng skill chuẩn của công ty, không nhặt skill random từ internet — `deny` giấu chúng khỏi model.
 **Nếu làm sai?** Đặt `deny *` rồi quên allow skill bạn cần → model không bao giờ thấy skill nào.
@@ -241,13 +239,13 @@ Rule theo thứ tự, **khớp cuối thắng**. Đặt cùng bộ rule dưới 
 
 - Skills toàn bộ: https://opencode.ai/v2/docs/skills/ (verify 28/10/2026)
 - Permissions `skill` action: https://opencode.ai/v2/docs/permissions/ (verify 28/10/2026)
-- Policies `integration.use` (khóa skill): https://opencode.ai/v2/docs/policies/ (verify 28/10/2026)
+- Policies `skill.use` (khóa skill, từ v2.2.3): https://opencode.ai/v2/docs/policies/ (verify 30/10/2026)
 
 ## Đọc tiếp
 
 - [05-agents-build-plan-custom.md](05-agents-build-plan-custom.md) — gắn permissions/agent vào skill workflow.
 - [06-commands-slash-custom.md](06-commands-slash-custom.md) — khi nào dùng command thay vì skill.
-- [09-permissions-policies.md](09-permissions-policies.md) — `deny` + `integration.use skill:<id>` khóa skill.
+- [09-permissions-policies.md](09-permissions-policies.md) — `deny` + policy `skill.use` khóa skill.
 - [10-background-tasks.md](10-background-tasks.md) — skill gọi subagent chạy nền.
 - [../03-cau-hoi-thuong-gap/05-agents-skills-faq.md](../03-cau-hoi-thuong-gap/05-agents-skills-faq.md) — FAQ agent/skill/command.
 

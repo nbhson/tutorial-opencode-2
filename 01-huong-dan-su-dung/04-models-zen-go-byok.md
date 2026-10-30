@@ -4,7 +4,7 @@
 
 ## Mục tiêu
 
-- Phân biệt BYOK / Go ($10) / Go Plus ($40) / Console (Zen) pay-as-you-go.
+- Phân biệt BYOK / Go ($10) / Go Plus ($40) / Console (Zen) pay-as-you-go / Claude Agent (login Claude Code).
 - Viết `provider/model#variant` đúng, biết chỗ nào giữ variant, chỗ nào không.
 - Biết danh sách model Free hiện tại + cách ẩn/hiện, và các van chặn bill (budgets, auto-recharge).
 
@@ -31,6 +31,7 @@
 | Go $10/tháng | catalog curated, hạn mức theo $/model: 5 giờ = 20% hạn mức tháng, tuần 50%, tháng 100% | dùng vừa, workspace **single-member** |
 | Go Plus $40/tháng | cùng catalog Go, hạn mức cao hơn (thường gấp 3–4 lần) | dùng nặng |
 | Console pay-as-you-go | per-1M-tokens, nạp credits, bán giá gốc chỉ cộng phí xử lý | thử nhiều model / team qua workspace |
+| Claude Agent (từ 2.2.3) | dùng login + models của Claude Code subscription, không cần key API | đã trả Claude Pro/Max và cài Claude Code |
 
 Giá lấy từ [console/go](https://opencode.ai/v2/docs/console/go/) và [console/models](https://opencode.ai/v2/docs/console/models/) — verify 28/10/2026.
 
@@ -42,6 +43,8 @@ Giá lấy từ [console/go](https://opencode.ai/v2/docs/console/go/) và [conso
 Chi tiết từng đường:
 
 **BYOK** — key của chính bạn, trả provider trực tiếp. Cắm bằng `/connect` (chọn provider, dán key) hoặc `opencode auth login anthropic --method key` ngoài TUI. V2 lưu credential trong **SQLite** của server (`~/.local/share/opencode/opencode.db` — in đúng đường bằng `opencode debug paths db`); file `auth.json` cũ của v1 chỉ được import 1 lần lúc migrate, V2 không ghi ngược lại. (verify 28/10/2026 — [docs/cli/providers](https://opencode.ai/v2/docs/cli/providers/))
+
+**Claude Agent** (provider built-in từ v2.2.3, 30/10/2026) — chạy Claude Code trong OpenCode bằng subscription Claude Code của bạn, không cần key API riêng. 3 bước: (1) cài Claude Code, (2) `claude auth login` trong terminal, (3) mở `/connect` → chọn **Claude Agent**. Nếu `claude` không ở PATH mặc định, set `OPENCODE_CLAUDE_PATH` trỏ tới executable. Hợp với ai đã trả Claude Pro/Max và muốn bill đi qua subscription đó. (verify 30/10/2026 — release v2.2.3)
 
 **Go / Go Plus** — subscription của OpenCode Console: $10 và $40/tháng. Catalog curated gồm Grok 4.7, GLM-5.3-Flash/5.3/5.2, GPT 6 Luna, GPT 5.6 Luna, Claude Haiku 5.5, Gemini 4 Argon, Kimi K3.1 Pro / K3 / K2.7 Code, LongCat-2.0, Step 5 Preview, DeepSeek V4.1 Flash / V4 Pro, Qwen3.8 Max/Flash/3.7 Plus, MiniMax M3.1 Flash/M3, MiMo-V2.6/2.5, Hy4/Hy3... (danh sách thay đổi — verify 28/10/2026, [console/go](https://opencode.ai/v2/docs/console/go/)). Cái cần nhớ:
 
@@ -58,9 +61,9 @@ Chi tiết từng đường:
 { "model": "opencode-go/kimi-k3" }         // qua Go subscription
 ```
 
-Nạp credits, tính theo 1M tokens. Console **bán giá gốc**, chỉ cộng phí xử lý khi mua credits: **4.6% + $0.31** mỗi lần nạp (verify 28/10/2026 — [console/models](https://opencode.ai/v2/docs/console/models/)). Van chặn bill: auto-recharge (tự mua credits khi Balance thấp) và **budgets** — cap chi tiêu theo tháng cho cả workspace và từng member. Con số "$20 nạp mở đầu / auto-reload khi <$5" trong tài liệu cũ **cần verify lại** — docs v2 không ghi số cụ thể.
+Nạp credits, tính theo 1M tokens. Console **bán giá gốc**, chỉ cộng phí xử lý khi mua credits: **4.6% + $0.31** mỗi lần nạp (verify 28/10/2026 — [console/models](https://opencode.ai/v2/docs/console/models/)). Van chặn bill: auto-recharge (tự mua credits khi Balance thấp) và **budgets** — cap chi tiêu theo tháng cho cả workspace và từng member.
 
-Model Free (lưu ý: **Kimi K3 không free** — nó là model trả phí $3/$15; cái này file cũ viết nhầm): hiện tại gồm Big Pickle, GLM-5.3-Flash Free, DeepSeek V4.1 Flash Free, Beam Free, Flint 40B Free, MiMo-V2.6-Flash Free, Nemotron 3 Ultra/Lightning/Super VL Free, Jev 1.13 Free — đều "free limited time". Ẩn free models đi:
+Model Free (lưu ý: **Kimi K3 không free** — model trả phí $3/$15, đừng nhầm với `glm-5.3-flash` Free): hiện tại gồm Big Pickle, GLM-5.3-Flash Free, DeepSeek V4.1 Flash Free, Beam Free, Flint 40B Free, MiMo-V2.6-Flash Free, Nemotron 3 Ultra/Lightning/Super VL Free, Jev 1.13 Free — đều "free limited time". Ẩn free models đi:
 
 ```bash
 # cho server process dang chay moi lan lenh
@@ -152,9 +155,10 @@ Provider bị deny **biến mất khỏi catalog và `/models`** dù còn creden
 ## Luồng: chọn đường trả tiền
 
 1. **Đã có key provider** (công ty cấp, card cá nhân) → BYOK: `/connect` → chọn provider → dán key. Chi phí = bill provider, không trung gian. Lỗi hay gặp: key đặt trong env của **server process** mới có tác dụng — `opencode service set env ANTHROPIC_API_KEY ...`, không phải env của terminal TUI.
-2. **Cá nhân, dùng vừa, muốn bill cố định** → Go $10. Đăng ký Console → copy API key → `/connect` → OpenCode Go → `/models` chọn. Lỗi hay gặp: mời member vào workspace Go → không được, Go là single-member.
-3. **Team / muốn thử nhiều model** → Console pay-as-you-go: nạp credits, `/connect` chọn OpenCode, dán key, mời member, set budgets + bật models tab nào được dùng.
-4. **Dùng nặng theo tháng, model open-source** → Go Plus $40.
+2. **Đã trả Claude Pro/Max + cài Claude Code** → Claude Agent: `claude auth login` rồi `/connect` chọn Claude Agent.
+3. **Cá nhân, dùng vừa, muốn bill cố định** → Go $10. Đăng ký Console → copy API key → `/connect` → OpenCode Go → `/models` chọn. Lỗi hay gặp: mời member vào workspace Go → không được, Go là single-member.
+4. **Team / muốn thử nhiều model** → Console pay-as-you-go: nạp credits, `/connect` chọn OpenCode, dán key, mời member, set budgets + bật models tab nào được dùng.
+5. **Dùng nặng theo tháng, model open-source** → Go Plus $40.
 
 ## Ví dụ chi tiết
 

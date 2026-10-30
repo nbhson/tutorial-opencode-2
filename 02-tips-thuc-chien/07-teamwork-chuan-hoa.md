@@ -108,7 +108,7 @@ Org khóa cứng: `policies` ở system/Console (`deny provider` lạ, `deny she
 - **5–8′** Viết 1 command `/review` + 1 agent `reviewer` theo mẫu — để nó vào `.opencode/commands/` và `.opencode/agents/`.
 - **8–11′** Viết `AGENTS.md` ≤40 dòng (tips 01) + `.env.example` + docs onboard ghi rõ biến `export` nào.
 - **11–13′** Đẩy lên repo; nhờ 1 đồng nghiệp pull về, mở `opencode`, `/connect`, `opencode mcp list` — phải xanh hết.
-- **11–15′** Đồng nghiệp chạy `/review` lên PR mẫu; ghi lại chỗ vấp → đó là việc docs còn thiếu.
+- **13–15′** Đồng nghiệp chạy `/review` lên PR mẫu; ghi lại chỗ vấp → đó là việc docs còn thiếu.
 
 ## So sánh
 

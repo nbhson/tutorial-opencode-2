@@ -76,7 +76,7 @@ flowchart TD
     E --> G
 ```
 
-**Giải thích:** Policies nhị phân (allow/deny), không prompt, chỉ tighten — và **đảo chiều precedence**: config rộng hơn được đánh giá sau nên thắng config hẹp; system file và Console luôn thắng project ([policies — Precedence](https://opencode.ai/v2/docs/policies), verify 28/10/2026). Đó là lý do "repo không thể mở lại provider mà org đã deny". Còn permissions là rule 3 trường (`action`/`resource`/`effect`) theo từng agent, có `ask`.
+**Giải thích:** Policies nhị phân (allow/deny), không prompt, chỉ tighten — và **đảo chiều precedence**: config rộng hơn được đánh giá sau nên thắng config hẹp; system file và Console luôn thắng project ([policies — Precedence](https://opencode.ai/v2/docs/policies), verify 28/10/2026). Đó là lý do "repo không thể mở lại provider mà org đã deny". Còn permissions là rule 3 trường (`action`/`resource`/`effect`) theo từng agent, có `ask`. Từ v2.2.3, policy có **action riêng cho từng loại integration**: `mcp.use` (MCP servers), `skill.use` (skills), `plugin.use` (plugins) — `integration.use` chỉ còn điều khiển integration accounts; rule cũ dùng resource prefix `mcp:`/`skill:`/`plugin:` được convert tự động, nhưng một rule `integration.use` trần không còn phủ MCP/skill/plugin nữa.
 
 **Làm thế nào:**
 

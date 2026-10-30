@@ -21,7 +21,7 @@ curl -fsSL https://opencode.ai/v2/install | bash
 opencode --version   # phai ra 2.2.x
 ```
 
-**Nếu vẫn lỗi:** kiểm tra `mise` (bản < 2026.10.9 không hiểu v2), PATH đang trỏ binary cũ ở thư mục khác (`which -a opencode`), hoặc Docker tag nhầm — image Docker dùng tag version như `ghcr.io/anomalyco/opencode:2.0.0`, không phải tag chung cho cả 2 dòng.
+**Nếu vẫn lỗi:** kiểm tra `mise` (bản < 2026.10.9 không hiểu v2), PATH đang trỏ binary cũ ở thư mục khác (`which -a opencode`), hoặc Docker tag nhầm — image Docker dùng tag version như `ghcr.io/anomalyco/opencode:2.2.3`, không phải tag chung cho cả 2 dòng.
 
 ## Q2: "`upgrade --major` báo không có gì mới dù đang v1?"
 
@@ -100,6 +100,36 @@ Preserve its behavior and all unrelated settings.
 
 **Nếu vẫn lỗi:** nghi ngờ field được hỗ trợ mà hành vi sai → báo compatibility issue kèm `opencode --version`, đây là cam kết docs: "treat it as a compatibility bug rather than an expected migration requirement".
 
+## Q7: "Dọn dẹp cài đặt cũ thế nào cho sạch?"
+
+**Trả lời 1 câu:** `opencode uninstall` (có `--dry-run` để xem trước) — gỡ đúng package manager đã cài, nhưng không bao giờ xóa session/config/state.
+
+**Giải thích:** `opencode uninstall --dry-run` in ra những gì sẽ bị xóa; chạy thật thì dừng background service và terminal persistent trước khi xóa global cache. Session, config và state **không bao giờ bị xóa** ([docs CLI](https://opencode.ai/v2/docs/cli), verify 28/10/2026). Cài bằng package manager thì uninstall qua chính package manager đó; cài curl thì tool in ra lệnh xóa thủ công.
+
+**Làm thế nào:**
+
+```bash
+opencode uninstall --dry-run   # xem truoc se xoa gi
+opencode uninstall             # xac nhan go bo
+# -f de bo qua confirm, dung cho script/CI
+```
+
+**Nếu vẫn lỗi:** binary nào còn sót ở PATH khác (`which -a opencode`) — xóa tay file đó; session data nằm ở `~/.local/share/opencode/` nên đừng đụng khi chỉ muốn đổi version.
+
+## Q8: "Sau khi migrate, làm sao biết mọi thứ đã lành lặn?"
+
+**Trả lời 1 câu:** Chạy checklist verify của docs trong một project thật trước khi tin v2 cho việc chính.
+
+**Làm thế nào:** (theo [migrate-v1 — Verify your setup](https://opencode.ai/v2/docs/migrate-v1), verify 28/10/2026)
+
+1. Model + credentials: `/models` hiện model bạn dùng, `/connect` còn hợp lệ.
+2. Agents: `/agents` đủ agent custom, description hiện đúng.
+3. Permissions: thử 1 lệnh `ask`, 1 lệnh `deny` — đúng ý.
+4. MCP: `opencode mcp list` — trạng thái `connected`, không `needs authentication` nhảy lên lạ.
+5. Plugins: `opencode plugin list` — plugin đã port hiện trong list (plugin v1 không load là đúng ý thiết kế, xem FAQ 06).
+
+**Nếu vẫn lỗi:** giữ bộ v1 song song (bản copy) cho tới khi mục nào cũng tick — và đừng trỏ v1 về config đã convert, vì v1 đọc hiểu sai shape v2.
+
 ## Q9: "Cài cho CI/Docker thì dùng gì?"
 
 **Trả lời 1 câu:** Docker dùng tag version (`ghcr.io/anomalyco/opencode:2.0.0`), còn CI không có Docker thì tải binary standalone theo platform.
@@ -110,7 +140,7 @@ Preserve its behavior and all unrelated settings.
 
 ```yaml
 # CI workflow (neu dung Docker): pin tag version, khong dung tag chung
-# image: ghcr.io/anomalyco/opencode:2.2.0
+# image: ghcr.io/anomalyco/opencode:2.2.3
 opencode run --model anthropic/claude-sonnet-5-5 "Run tests"
 ```
 
@@ -150,34 +180,4 @@ opencode run --model anthropic/claude-sonnet-5-5 "Run tests"
 
 ---
 
-> **Chốt nhanh:** kẹt ở đâu trước tiên cũng kiểm tra `opencode --version` — chín trong mười chuyện cài đặt/upgrade v2 là do cònbinary của kênh v1.
-
-## Q7: "Dọn dẹp cài đặt cũ thế nào cho sạch?"
-
-**Trả lời 1 câu:** `opencode uninstall` (có `--dry-run` để xem trước) — gỡ đúng package manager đã cài, nhưng không bao giờ xóa session/config/state.
-
-**Giải thích:** `opencode uninstall --dry-run` in ra những gì sẽ bị xóa; chạy thật thì dừng background service và terminal persistent trước khi xóa global cache. Session, config và state **không bao giờ bị xóa** ([docs CLI](https://opencode.ai/v2/docs/cli), verify 28/10/2026). Cài bằng package manager thì uninstall qua chính package manager đó; cài curl thì tool in ra lệnh xóa thủ công.
-
-**Làm thế nào:**
-
-```bash
-opencode uninstall --dry-run   # xem truoc se xoa gi
-opencode uninstall             # xac nhan go bo
-# -f de bo qua confirm, dung cho script/CI
-```
-
-**Nếu vẫn lỗi:** binary nào còn sót ở PATH khác (`which -a opencode`) — xóa tay file đó; session data nằm ở `~/.local/share/opencode/` nên đừng đụng khi chỉ muốn đổi version.
-
-## Q8: "Sau khi migrate, làm sao biết mọi thứ đã lành lặn?"
-
-**Trả lời 1 câu:** Chạy checklist verify của docs trong một project thật trước khi tin v2 cho việc chính.
-
-**Làm thế nào:** (theo [migrate-v1 — Verify your setup](https://opencode.ai/v2/docs/migrate-v1), verify 28/10/2026)
-
-1. Model + credentials: `/models` hiện model bạn dùng, `/connect` còn hợp lệ.
-2. Agents: `/agents` đủ agent custom, description hiện đúng.
-3. Permissions: thử 1 lệnh `ask`, 1 lệnh `deny` — đúng ý.
-4. MCP: `opencode mcp list` — trạng thái `connected`, không `needs authentication` nhảy lên lạ.
-5. Plugins: `opencode plugin list` — plugin đã port hiện trong list (plugin v1 không load là đúng ý thiết kế, xem FAQ 06).
-
-**Nếu vẫn lỗi:** giữ bộ v1 song song (bản copy) cho tới khi mục nào cũng tick — và đừng trỏ v1 về config đã convert, vì v1 đọc hiểu sai shape v2.
+> **Chốt nhanh:** kẹt ở đâu trước tiên cũng kiểm tra `opencode --version` — chín trong mười chuyện cài đặt/upgrade v2 là do còn binary của kênh v1.

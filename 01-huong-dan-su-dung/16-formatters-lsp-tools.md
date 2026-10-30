@@ -146,8 +146,11 @@ Alternatives cho diagnostics trong workflow agent:
 | Tự động hóa | `subagent`, `execute` (Code Mode) | `subagent`/`execute` |
 | Session + worktree | `session_rename`, `session_move`, `worktree_*` | (một số không cần permission) |
 | Browser | tab, snapshot, click, screenshot, console, network, Lighthouse | `browser` |
+| Ảnh (2.2.2+) | `image_generate` | theo tool permission thường |
 
 Chi tiết đáng nhớ:
+
+- `image_generate` — từ v2.2.2 **bật mặc định** khi provider đang dùng hỗ trợ sinh ảnh (v2.2.1 còn opt-in). Chọn model sinh ảnh bằng `experimental.image_generate.model` trong config; provider không hỗ trợ thì tool không xuất hiện. (verify 30/10/2026 — changelog v2.2.1/v2.2.2)
 
 - `read` chỉ đọc text 2000 dòng/50 KiB mỗi page; hỗ trợ PNG/JPEG/GIF/WebP/PDF tới 20 MiB.
 - `grep` pattern là **regex**, resource của permission là pattern chứ không phải path tìm.

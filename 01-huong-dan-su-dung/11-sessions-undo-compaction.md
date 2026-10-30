@@ -104,8 +104,6 @@ Về `OPENCODE_DISABLE_AUTOCOMPACT`: biến môi trường này từng được 
 4. **Session dài dần** → theo dõi; thấy summary chuẩn bị chạy, tự ghi 5 gạch quan trọng hoặc chủ động `<leader>c` nén lúc bạn còn kiểm soát.
 5. **Task xong hoặc hết phần việc bẩn** → `/new`. Cần chứng tích → `opencode session export ses_xxx [--sanitize]`.
 
-5. **Task xong hoặc hết phần việc bẩn** → `/new`. Cần chứng tích → `opencode session export ses_xxx [--sanitize]`.
-
 ### Checklist mở session mới (20 giây, tiết kiệm 2 giờ)
 
 - [ ] Session này có 1 mục tiêu không? Hơn 1 mục tiêu là chia.

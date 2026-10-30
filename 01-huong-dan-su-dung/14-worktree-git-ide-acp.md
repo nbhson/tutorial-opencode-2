@@ -42,7 +42,7 @@ Mặc định, worktree mới được tạo dưới data directory của server
 }
 ```
 
-Git là chiến lược (strategy) mặc định; plugin có thể đăng ký strategy riêng và tự thành default trong runtime của nó. Trong TUI, dialog **Move session** còn có phím riêng: `ctrl+a` tạo worktree mới, `ctrl+m` move, `ctrl+d` xóa worktree, `ctrl+r` refresh.
+Git là chiến lược (strategy) mặc định; plugin có thể đăng ký strategy riêng và tự thành default trong runtime của nó. Trong TUI, dialog **Move session** còn có phím riêng: `ctrl+a` tạo worktree mới, `ctrl+m` move, `ctrl+d` xóa worktree, `ctrl+r` refresh. Từ v2.2.2, picker worktree chạy nhanh hơn khi tạo từ một branch có sẵn — tạo worktree theo branch là đường thông dụng nhất.
 
 **Vì sao quan trọng?** Song song 3 features chung 1 tree = agent A sửa file agent B đang sửa. Worktree là vách ngăn vật lý.
 **Nếu làm sai?** Task rủi ro cao (migration, refactor lớn) làm thẳng trên `main` — sai là mất đường lui.
@@ -170,8 +170,6 @@ Configured instructions nạp **sau** các `AGENTS.md` và theo thứ tự khai 
 
 **Vì sao quan trọng?** AGENTS.md là quy ước phát hiện; `instructions` là cách đưa tài liệu không tên chuẩn (CONTRIBUTING, bộ quy tắc reviewer...) vào cùng mạch context mà không phải gộp chúng thành AGENTS.md.
 
-Root nạp khi mở session; file trong `packages/web/` nạp tự động khi agent đọc/sửa vào khu đó — luật hiện **đúng lúc cần**, không đốt context từ đầu.
-
 ## Giải thích từng phần
 
 - **`worktree_remove` dùng permission `edit`** với thư mục worktree làm resource — vì xóa worktree là hành động phá dữ liệu; hai util còn lại (`create`, `list`) không yêu cầu permission action riêng.
@@ -186,7 +184,7 @@ Root nạp khi mở session; file trong `packages/web/` nạp tự động khi a
 
 Mỗi entry phải là đường dẫn tuyệt đối, không chứa `*` hay `?`. Permission rule read/edit/shell vẫn áp dụng; chứng thư cấp lưu trên session (child session kế thừa) — tức client ACP khác dùng lại session vẫn thấy các grant cũ.
 
-- **ACP có thể đi cả MCP** — client được truyền MCP servers (stdio + HTTP) khi tạo session; server trùng tên config sẽ đè server cấu hình trong thư mục đó; policy `integration.use` vẫn áp dụng.
+- **ACP có thể đi cả MCP** — client được truyền MCP servers (stdio + HTTP) khi tạo session; server trùng tên config sẽ đè server cấu hình trong thư mục đó; policy `mcp.use` vẫn áp dụng (từ v2.2.3, trước đây là `integration.use`).
 - **Một prompt mỗi lúc** — session ACP chạy 1 prompt tại một; prompt thứ hai trong lúc chạy sẽ bị lỗi. Hủy bằng `session/cancel` (`stopReason: "cancelled"`).
 - **ACP child session** — OpenCode gửi update của child session qua `session/update` trên session của ACP prompt, mỗi update mang `_meta["opencode/child-session"]` (id, parentID, depth, title). Sau khi prompt kết thúc, OpenCode ngừng gửi update child, nhưng permission request và question từ child vẫn tới client.
 - **ACP retry status** — khi model call fail và OpenCode lên lịch retry, nó gửi `session_info_update` với `_meta["opencode/retry"]` (attempt, nextRetryAt, error); khi retry bắt đầu thật, giá trị chuyển thành `null`. Client nên clear retry status khi prompt response đến.

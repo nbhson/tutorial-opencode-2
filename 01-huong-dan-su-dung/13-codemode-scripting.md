@@ -179,9 +179,8 @@ Deny theo `action` (khớp tên chuẩn hóa `<server>_<tool>`) là **giấu/den
 - **Catalog** — danh sách functions model thấy: tool builtin + tool MCP (theo namespace server). Model không thấy schema thô của từng MCP tool.
 - **Per-server opt-out** — `"codemode": false` ở từng server (local lẫn remote) đưa tools của server đó về native list. Đây là cách trị server cần tool "luôn trên mặt".
 - **Permission 2 lớp** — script trong `execute` là lớp 1 (deny `execute` là gỡ cả cụm); từng tool gọi trong script vẫn đi qua permission riêng của nó (lớp 2). Plugin tool thì theo permission plugin tự khai báo.
-- **Server instructions** — khi server dùng Code Mode, OpenCode chỉ thêm 1 dòng chỉ model chỗ xem tools của server đó (thay vì dán nguyên instructions). Nếu permissions deny hết tools của server (hoặc deny `execute` của server dùng Code Mode), instructions của server bị bỏ.
-- **sessionID metadata** — mọi call trên danh nghĩa một session đều kèm `ai.opencode/sessionID` trong `_meta` của request (cả native lẫn Code Mode). Đây là ID để correlation, không phải đối tượng xác thực — server remote nhận raw ID và có thể log, đừng dùng nó làm chìa khóa xác thực.
 - **Server instructions khi dùng Code Mode** — thay vì dán nguyên instructions của server vào prompt, OpenCode chỉ thêm 1 dòng chỉ model chỗ xem tools; nếu permissions deny hết tools (hoặc deny `execute` của server), instructions cũng bị bỏ theo. Ý nghĩa: chặn tool = chặn cả "lời dặn" đi kèm — tổng context sạch hơn bạn tưởng.
+- **sessionID metadata** — mọi call trên danh nghĩa một session đều kèm `ai.opencode/sessionID` trong `_meta` của request (cả native lẫn Code Mode). Đây là ID để correlation, không phải đối tượng xác thực — server remote nhận raw ID và có thể log, đừng dùng nó làm chìa khóa xác thực.
 
 ## So sánh với Copilot / Claude Code
 

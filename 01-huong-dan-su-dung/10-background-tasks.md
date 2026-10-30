@@ -87,8 +87,6 @@ opencode run --standalone --model anthropic/claude-sonnet-5-5 "Review this repos
 
 `opencode run` không phải "background" — nhưng cùng phục vụ một mục tiêu: tách việc chạy dài khỏi màn hình bạn đang nhìn. Phần nền phía sau là background service: server chung do OpenCode tự quản, sở hữu sessions, config, permissions, tool execution; mọi local client (TUI, mini, `run`) đều nối vào đó. Script/CI chạy `--standalone` để có private server nhận riêng API key từ secret.
 
-`opencode run` không phải "background" — nhưng cùng phục vụ một mục tiêu: tách việc chạy dài khỏi màn hình bạn đang nhìn.
-
 ## Luồng hoạt động (Flow)
 
 1. **Xác định việc có độc lập không** — không đụng file session chính đang sửa, không phụ thuộc kết quả việc khác đang chạy. Lỗi hay gặp ở bước này: chọn nghiên cứu việc mà chính bạn đang sửa — kết quả nền lỗi thời ngay khi ra đời.

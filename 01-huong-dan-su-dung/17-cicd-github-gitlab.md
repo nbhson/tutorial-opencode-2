@@ -107,7 +107,7 @@ Trong CI pipeline thường không có file config project, nên cách đúng nh
 
 ## Lưu ý quan trọng: GitHub Action đã bị bỏ
 
-**Quan trọng — verify 28/10/2026:** OpenCode v2.2.0 (27/10/2026) đã **bỏ GitHub Action** như một trong 3 breaking changes. Action cũ không còn được duy trì và không chạy đúng trên v2.2.0+. Có thể tìm thấy action cũ trên GitHub Marketplace — **đừng dùng**. Cảm ơn `opencode run --standalone` chính là cách CI được khuyến nghị chính thức từ docs (verify 28/10/2026 — [docs/cli/commands](https://opencode.ai/v2/docs/cli/commands)).
+**Quan trọng — verify 30/10/2026:** OpenCode v2.2.0 (27/10/2026) đã **bỏ GitHub Action** (breaking change). Action cũ không còn được duy trì và không chạy đúng trên v2.2.0+ — vẫn còn thấy trên GitHub Marketplace nhưng **đừng dùng**. Cách CI được khuyến nghị chính thức từ docs: cài CLI rồi chạy `opencode run --standalone`.
 
 **Nôm na:** action cũ như một chiếc áo phao cũ — không còn được bảo trì, không còn đúng size, và có thể chìm. Dùng `opencode run` như cách tiếp cận chính thức và duy trì được.
 
@@ -216,7 +216,7 @@ Lỗi hay gặp theo bước:
 | Secrets | Env var / `{env:NAME}` | Repo secrets | Env var |
 | Kết quả vào PR | Log output / script tự xử lý | PR comment tự động | PR comment |
 
-Điểm khác: Copilot và Claude Code có GitHub Action chính thức được duy trì; OpenCode v2.2.0 đã bỏ theirs — cách chính thức là dùng `opencode run` trực tiếp. Điều này đồng nghĩa bạn phải tự cài CLI trong pipeline và tự xử lý output, đổi lại bạn kiểm soát hoàn toàn.
+Điểm khác: Copilot và Claude Code có GitHub Action chính thức được duy trì; OpenCode v2.2.0 đã bỏ nó — cách chính thức là dùng `opencode run` trực tiếp. Điều này đồng nghĩa bạn phải tự cài CLI trong pipeline và tự xử lý output, đổi lại bạn kiểm soát hoàn toàn.
 
 ## Lỗi thường gặp
 

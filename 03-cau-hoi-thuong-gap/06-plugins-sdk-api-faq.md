@@ -34,7 +34,7 @@ export default Plugin.define({
 
 **Trả lời 1 câu:** `@opencode/client` gọi server API v2 qua mạng (cùng client với TUI/Desktop); `@opencode/sdk` nhúng cả engine vào app bạn — router in-memory, không mở HTTP listener.
 
-**Giải thích:** Client dùng khi bạn có một server OpenCode đang chạy (local service, `opencode serve`...) và muốn điều khiển từ ngoài ([build](https://opencode.ai/v2/docs/build/), verify 28/10/2026). SDK thì "hosts OpenCode directly inside your application": tự dựng server trong bộ nhớ, **không mở HTTP listener, không thêm network hop**, và có hướng dẫn riêng cho Cloudflare Durable Objects ([build/sdk](https://opencode.ai/v2/docs/build/sdk), verify 28/10/2026). Cả hai dùng chung Promise values, error types, streams.
+**Giải thích:** Client dùng khi bạn có một server OpenCode đang chạy (local service, `opencode serve`...) và muốn điều khiển từ ngoài ([build](https://opencode.ai/v2/docs/build/), verify 28/10/2026). SDK thì "hosts OpenCode directly inside your application": tự dựng server trong bộ nhớ, **không mở HTTP listener, không thêm network hop**, và có hướng dẫn riêng cho Cloudflare Durable Objects ([build/sdk](https://opencode.ai/v2/docs/build/sdk), verify 28/10/2026). Cả hai dùng chung Promise values, error types, streams. Lưu ý breaking trên package `@opencode/ai` (2.2.0–2.2.3): root chỉ còn **Promise API** (Effect API ở `@opencode/ai/effect`); từ 2.2.3 speech/transcription/video chuyển sang `@opencode/ai/experimental` và tool khai báo thống nhất bằng `tool(...)` (thay `AI.tool`/`Tool.make`).
 
 ```ts
 import { OpenCode } from "@opencode/sdk"
@@ -152,7 +152,7 @@ opencode service restart                    # fallback khi khong reload
 
 **Trả lời 1 câu:** TUI plugin cấu hình riêng trong `~/.config/opencode/cli.json` (mảng `plugins` của cli.json) và vẫn hoạt động khi TUI nối server remote.
 
-**Giải thích:** TUI plugin không chạy trên server nên không đụng plugin server; nó cấu hình trong `cli.json` — "TUI-only plugins are configured separately and remain active when connected to a remote server" ([plugins — Terminal](https://opencode.ai/v2/docs/plugins), verify 28/10/2026). Plugin thường (server-side) khai trong `opencode.json(c)` như FAQ 06 Q1.
+**Giải thích:** TUI plugin không chạy trên server nên không đụng plugin server; nó cấu hình trong `cli.json` — "TUI-only plugins are configured separately and remain active when connected to a remote server" ([plugins — Terminal](https://opencode.ai/v2/docs/plugins), verify 28/10/2026). Plugin thường (server-side) khai trong `opencode.json(c)` như FAQ 06 Q1. **Breaking:** từ v2.2.1, TUI plugins yêu cầu **OpenTUI 0.8+** (`@opencode/plugin` cần `@opentui/core` + `@opentui/solid` ≥ 0.8.0; v2.2.0 từng yêu cầu 0.7) — plugin TUI cũ cần nâng dependency trước khi update OpenCode.
 
 ```json
 // ~/.config/opencode/cli.json

@@ -5,7 +5,7 @@
 > **Đọc xong:** tự cài + nâng cấp v1→v2 an toàn, chọn đúng bề mặt (TUI/Desktop/Web/CLI non-interactive), cấu hình model + permissions + agents + skills + MCP đúng chuẩn v2, và có lộ trình 5 ngày lên pro.
 > **Thời gian:** ~5 phút trang này; học đủ khóa là 5 ngày.
 
-Bộ tài liệu tiếng Việt deep-dive về **OpenCode 2 (verify lần đầu 16/10/2026 với `opencode.ai/v2/docs`, announcement 2.0 ngày 12/10/2026, npm `@opencode/cli` 2.0.29; cập nhật 27/10/2026: npm latest là `@opencode/cli` 2.2.0)**.
+Bộ tài liệu tiếng Việt deep-dive về **OpenCode 2 (verify lần đầu 16/10/2026 với `opencode.ai/v2/docs`, announcement 2.0 ngày 12/10/2026, npm `@opencode/cli` 2.0.29; cập nhật 30/10/2026: npm latest là `@opencode/cli` 2.2.3)**.
 Nguồn tổng hợp: docs v2 chính thức (config/agents/permissions/MCP/skills/plugins/models), migration guide v1→v2, changelog, và kinh nghiệm thực chiến terminal-agent.
 
 ## Cho ai đọc?
@@ -87,7 +87,7 @@ Quy tắc vàng (nhớ 4 câu này là đủ 80% sức mạnh):
 
 ## Phiên bản & nguồn
 
-- OpenCode **2.0** (2.0.0 publish 11/09/2026). **Cập nhật 27/10/2026:** dòng v2 đã lên **2.2.0** (27/10/2026) — v2.1.0 (20/10: Todo list TUI qua `experimental.todo`, persistent terminals Windows), v2.1.4 (23/10: MCP Input Forms hiện form khi server hỏi input thay vì timeout; `experimental.background_compaction`), v2.2.0 (27/10: Desktop plugins experimental, image/decision generation APIs trong plugin/SDK, **3 breaking changes: `@opencode/ai` root thành Promise API — Effect API chuyển sang `@opencode/ai/effect`; OpenCode GitHub Action bị bỏ; TUI plugins cần OpenTUI 0.7**). Xem version: `opencode --version`. Dòng 1.x mới nhất: 1.19.4 (22/10/2026).
+- OpenCode **2.0** (2.0.0 publish 11/09/2026). **Cập nhật 30/10/2026:** dòng v2 đã lên **2.2.3** (30/10/2026) — v2.1.0 (20/10: Todo list TUI qua `experimental.todo`, persistent terminals Windows), v2.1.4 (23/10: MCP Input Forms hiện form khi server hỏi input thay vì timeout; `experimental.background_compaction`), v2.2.0 (27/10: Desktop plugins experimental, image/decision generation APIs trong plugin/SDK, **3 breaking changes: `@opencode/ai` root thành Promise API — Effect API chuyển sang `@opencode/ai/effect`; OpenCode GitHub Action bị bỏ; TUI plugins cần OpenTUI 0.7**), v2.2.1 (29/10: `/goal` giữ session làm việc đến khi đạt objective + `/schedule` scheduled prompts opt-in; **TUI plugins cần OpenTUI 0.8+**), v2.2.2 (29/10: **image generation bật mặc định** khi provider kết nối hỗ trợ — tool `experimental_image_generate`, model qua `experimental.image_generate.model`; worktree picker nhanh từ branch), v2.2.3 (30/10: **provider Claude Agent builtin** — cài Claude Code, `claude auth login`, chọn Claude Agent trong `/connect` để dùng login + models của Claude Code; managed policy tách action mới `mcp.use`/`skill.use`/`plugin.use` khỏi `integration.use`). Xem version: `opencode --version`. Dòng 1.x mới nhất: 1.19.4 (22/10/2026).
 - Docs gốc v2: https://opencode.ai/v2/docs — Announcement 2.0 (12/10/2026): https://anoma.ly/notes/opencode-2-0/ — Migrate v1: https://opencode.ai/v2/docs/migrate-v1/
 - Zen models + pricing: https://opencode.ai/zen — Console/Go: https://opencode.ai/v2/docs/console/go
 - **Snapshot sự kiện 16/10/2026 (đã verify):**

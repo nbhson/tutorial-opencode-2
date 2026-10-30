@@ -55,8 +55,9 @@ opencode plugin remove opencode-acme-plugin@1.2.0
 
 Ba đường mở rộng từ code — chọn đúng là đỡ khổ:
 
-- **`@opencode/client`** — TypeScript client cho **HTTP API** của server OpenCode (types và methods sinh từ cùng contract với [API reference](https://opencode.ai/v2/docs/api)). Dùng khi app của bạn nối tới server đang chạy qua mạng. Có bản Effect API riêng (`/v2/docs/build/client/effect/`).
-- **`@opencode/sdk`** — nhúng thẳng engine OpenCode (chính code chạy CLI) vào app/server của bạn: `OpenCode.create()` dựng server trong bộ nhớ, route API qua HTTP router **in-memory**, không mở HTTP listener, không thêm network hop. Có guide chạy trên Cloudflare Durable Objects và bản Effect API (`/build/sdk/effect/`).
+- **`@opencode/client`** — TypeScript client cho **HTTP API** của server OpenCode (types và methods sinh từ cùng contract với [API reference](https://opencode.ai/v2/docs/api)). Dùng khi app của bạn nối tới server đang chạy qua mạng.
+- **`@opencode/sdk`** — nhúng thẳng engine OpenCode (chính code chạy CLI) vào app/server của bạn: `OpenCode.create()` dựng server trong bộ nhớ, route API qua HTTP router **in-memory**, không mở HTTP listener, không thêm network hop. Có guide chạy trên Cloudflare Durable Objects.
+- **`@opencode/ai`** — package SDK chính; từ v2.2.0 (27/10/2026) root của package là **Promise API**, còn bản Effect API đã tách sang package riêng `@opencode/ai/effect` — code đang import Effect từ root sẽ phải đổi import. (verify 30/10/2026 — changelog v2.2.0)
 - **Server API đổi contract so với v1** — tích hợp cũ (fetch API v1) phải port sang endpoint mới; `@opencode/client` là cách được hỗ trợ chính thức.
 - **ACP**: `opencode acp` chạy Agent Client Protocol qua stdin/stdout cho editor tích hợp (chi tiết ở [bài 14](./14-worktree-git-ide-acp.md)).
 
@@ -165,7 +166,7 @@ const info = await client.server.info()
 
 ## Giải thích từng phần
 
-- **Một plugin, nhiều phần (parts):** server (`.`), TUI (`./tui`), GUI desktop (`./gui-experimental`), RPC (`./rpc`) — tất cả chỉ phụ thuộc 1 package `@opencode/plugin`. Một entry trong `plugins[]` nạp mọi phần; bản TUI-only thì khai trong `cli.json`.
+- **Một plugin, nhiều phần (parts):** server (`.`), TUI (`./tui`), GUI desktop (`./gui-experimental`), RPC (`./rpc`) — tất cả chỉ phụ thuộc 1 package `@opencode/plugin`. Một entry trong `plugins[]` nạp mọi phần; bản TUI-only thì khai trong `cli.json`. Đáng nhớ: **TUI plugins yêu cầu OpenTUI 0.8+ từ v2.2.1** (breaking — bản viết cho OpenTUI 0.7 của 2.2.0 phải nâng); **GUI/desktop plugins vẫn experimental** (từ v2.2.0), API có thể đổi.
 - **Hot-reload:** đổi file trong config directory được watch thì tự nạp lại; đổi file cục bộ phụ thuộc (unwatched) có thể vẫn phải restart. `plugin check/update` chỉ đụng package **chưa pin** — version exact và full commit hash được giữ nguyên.
 - **`ctx` là client + API cùng lúc:** v2 gom thao tác theo domain (`ctx.session`, `ctx.tool`, `ctx.provider`, `ctx.worktree`...), thay cho bảng hook-by-string của v1. Bảng tham khảo nhanh khi port:
 
@@ -183,7 +184,6 @@ const info = await client.server.info()
 
 - **RPC plugin:** plugin xuất `./rpc` cho client/plugin khác gọi method typed — client import contract rồi `client.rpc(Acme)`; còn mọi HTTP client đều có thể gọi `POST /api/rpc/{rpcID}/{method}` với `{ "input": ... }`. Import contract **không tự đăng ký** — server plugin phải được cấu hình và implement.
 - **`Service` của client** (`@opencode/client/service`): `Service.ensure()` tự phát hiện/khởi động shared background service (`opencode serve --service`) rồi trả endpoint — bạn không tự quản process.
-- **Cần verify:** câu "đồ án Figma chính chủ gồm MCP + 6 skills" từ bản nháp cũ chưa tìm được xác nhận trong docs v2 (verify 28/10/2026) — hãy kiểm tra lại trang plugins trước khi trích dẫn số liệu này.
 
 ## So sánh với Copilot / Claude Code
 
@@ -245,7 +245,7 @@ Nguồn chính thức (đã verify 28/10/2026):
 - `@opencode/client` — make/subscribe/Service: https://opencode.ai/v2/docs/build/client/
 - `@opencode/sdk` — OpenCode.create, in-process, worktrees: https://opencode.ai/v2/docs/build/sdk/
 - SDK trên Cloudflare Durable Objects: https://opencode.ai/v2/docs/build/sdk/cloudflare/
-- Effect variants (plugin/client/sdk): https://opencode.ai/v2/docs/build/plugins/effect/ , https://opencode.ai/v2/docs/build/sdk/effect/
+- Effect variants (plugin/client/sdk): https://opencode.ai/v2/docs/build/plugins/effect/ , https://opencode.ai/v2/docs/build/sdk/effect/ — lưu ý từ v2.2.0, Effect API của SDK chính ở package riêng `@opencode/ai/effect`
 - Server API reference: https://opencode.ai/v2/docs/api
 
 Bài liên quan: [13 — Code Mode scripting](./13-codemode-scripting.md), [14 — Worktree + Git + IDE/ACP](./14-worktree-git-ide-acp.md), [09 — Permissions & policies](./09-permissions-policies.md), [01 — Cài đặt & upgrade v1→v2](./01-cai-dat-upgrade-v1-v2.md).

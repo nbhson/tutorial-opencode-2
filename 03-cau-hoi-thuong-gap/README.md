@@ -14,4 +14,4 @@
 | 07 | Lỗi & Troubleshooting | 12 | ~192 | [07](./07-loi-troubleshooting-faq.md) |
 | 08 | Bảo mật | 11 | ~182 | [08](./08-bao-mat-faq.md) |
 
-Tất cả số trên reflect commit hiện tại (verify 28/10/2026, OpenCode 2.2.0). Quay về: [../README.md](../README.md)
+Tất cả số trên reflect commit hiện tại (verify 28/10/2026, OpenCode 2.2.0; bản mới nhất 2.2.3 — 30/10/2026). Quay về: [../README.md](../README.md)

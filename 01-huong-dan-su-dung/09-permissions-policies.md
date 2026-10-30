@@ -6,7 +6,7 @@
 
 - Viết `permissions[]` last-match-wins với `shell/edit/read/subagent/skill/...`.
 - Dùng `ask` + saved approvals đúng cách, hiểu nó không thắng `deny`.
-- Viết `policies` khóa cứng (`tool.use`, `provider.use`, `integration.use`) đúng thứ tự ưu tiên.
+- Viết `policies` khóa cứng (`tool.use`, `provider.use`, `mcp.use`/`skill.use`/`plugin.use`) đúng thứ tự ưu tiên.
 
 ## Mục lục
 
@@ -100,7 +100,7 @@ Các agent shipped **nối thêm** vào base này (không replace):
 | `summary` | deny tất cả |
 | `compaction` | **giữ nguyên base policy** (không deny thêm) |
 
-Lưu ý sửa soạn với file cũ: bản trước ghi "compaction deny gần hết" — docs v2 ghi rõ compaction giữ base policy. Rule global/agent viết sau sẽ override các default này.
+Lưu ý: `compaction` giữ nguyên base policy (không deny thêm). Rule global/agent viết sau sẽ override các default này.
 
 ### 4. Approvals (`ask` → once/always/reject)
 
@@ -126,13 +126,18 @@ Allow always cho `git status --short` có thể lưu pattern `shell: git status 
 ] }
 ```
 
-`policies` chạy **sau** permissions + saved approvals, chỉ biến allow/ask → deny (không mở thêm). Ba action:
+`policies` chạy **sau** permissions + saved approvals, chỉ biến allow/ask → deny (không mở thêm). Các action (verify 30/10/2026 — sau thay đổi của v2.2.3):
 
 | Action | Resource | Chặn gì |
 |---|---|---|
 | `provider.use` | provider ID (`anthropic`, `opencode`, custom) | provider biến mất khỏi catalog dù có key |
 | `tool.use` | `<action>:<value>` (vd `shell:git push *`, `read:*/.ssh/*`) | hard-deny permission check → lỗi `Blocked by configuration policy`, không prompt |
-| `integration.use` | `mcp:<server>`, `skill:<id>`, `plugin:<target>` | server/skill/plugin bị remove, không load |
+| `mcp.use` | server ID | MCP server bị remove, không load |
+| `skill.use` | skill ID | skill bị remove, không nạp |
+| `plugin.use` | plugin target | plugin bị remove, không load |
+| `integration.use` | integration account (Console integrations) | **từ v2.2.3 chỉ còn điều khiển integration accounts** — không còn chạm MCP/skill/plugin |
+
+⚠️ **Breaking v2.2.3:** rule cũ `integration.use` với prefix `mcp:`/`skill:`/`plugin:` được **convert tự động** sang action mới, nhưng rule `integration.use` không prefix (bare) **không còn** áp dụng cho MCP/skill/plugin — audit lại policy cũ sau khi lên 2.2.3.
 
 `tool.use` với `allow` **không cấp quyền** — nó chỉ gỡ `deny` rộng hơn đứng trước, sau đó quyền quyết định quay về rules của agent. Trong 1 file: khớp cuối thắng, **không có luật specificity** — viết rộng trước, exception sau:
 
@@ -155,7 +160,7 @@ Statement sai validate bị **drop kèm warning trong server log** (phần còn 
 5. `opencode.json(c)` trực tiếp (thư mục ngoài thắng thư mục trong)
 6. `.opencode/opencode.json(c)` (thư mục ngoài thắng thư mục trong)
 
-Policies **đảo ngược** quy tắc "gần thắng" của settings thường: config **rộng hơn** được evaluate sau nên thắng config hẹp. Repo không thể mở lại provider bị deny global:
+Policies **đảo ngược** quy tắc "gần thắng" của settings thường: config **rộng hơn** được evaluate sau nên thắng config hẹp (thứ tự ưu tiên: managed preferences > system file > Console workspace > global > project). Repo không thể mở lại provider bị deny global:
 
 ```jsonc
 // ~/.config/opencode/opencode.jsonc
@@ -164,8 +169,6 @@ Policies **đảo ngược** quy tắc "gần thắng" của settings thường:
 { "policies": [{ "action": "provider.use", "resource": "openai", "effect": "allow" }] }
 // Ket qua: openai VAN bi deny
 ```
-
-(Lưu ý sửa soạn: bản trước ghi thứ tự "Console → system managed" — thứ tự đúng là **managed preferences > system file > Console workspace > global > project**.)
 
 **Console workspace:** policy Providers/Tools trên trang Policies của workspace được biên dịch thành statements trong workspace config, xếp ngay dưới managed preferences + system file. Deny từ Console ghi rõ nguồn: `Blocked by Acme's policy`. Policy thay đổi được áp trong ~1 phút; đổi workspace là thay cả bộ; disconnect là xóa; Console không truy cập được thì giữ bộ cuối cùng. Key `experimental.policies` cũ vẫn được đọc và merge vào `policies`.
 
@@ -227,7 +230,7 @@ Giải thích từng phần:
 | Luật linh hoạt | `permissions[]` last-match-wins | permissions picker / allowlist | permissions + allowlist |
 | Ask khi chạy | `ask` + once/always/reject | approval prompt | permission prompt |
 | Khóa cứng org | `policies` (Console/system thắng) | policy/branch protection | managed policy/hooks |
-| Chặn MCP/skill/plugin | `integration.use` | từng tool setting | từng tool config |
+| Chặn MCP/skill/plugin | `mcp.use`/`skill.use`/`plugin.use` (2.2.3+) | từng tool setting | từng tool config |
 | Tên action cũ | v1 `bash/task` → v2 `shell/subagent` | — | — |
 
 Điểm khác mốc: OpenCode có `policies` **đi theo tài khoản** (Console workspace) — bạn dừng máy này sang máy khác vẫn bị chặn đúng như vậy; Copilot/Claude Code chặn chủ yếu theo máy/repo.
@@ -272,7 +275,7 @@ Giải thích từng phần:
 - Rule nguy hiểm (`sudo`, `rm -rf`, push, đọc secrets, `.ssh`) cho vào `policies` ở tầng cao nếu quản team. **Vì sao?** `permissions` project ai cũng sửa được; `policies` ở Console/global mới là khóa repo không lật nổi.
 - Sau khi bấm Allow always vài ngày, rà saved patterns một lần. **Vì sao?** Một số tool đề xuất pattern rất rộng (`*`) — bạn có thể đã allow nhiều hơn nghĩ.
 - Prefers allowlist hẹp cho `shell`. **Vì sao?** Scanner suy luận từ text lệnh là best-effort; pattern "chặn mọi lệnh xấu" sẽ luôn có lỗ hổng.
-- Muốn chặn **nguyên mẫu tool/skill/plugin/server** thì dùng `integration.use`, đừng lýt từng permission. **Vì sao?** Một dòng `mcp:github` deny sạch hơn chục dòng `<server>_<tool>`.
+- Muốn chặn **nguyên mẫu MCP server/skill/plugin** thì dùng `mcp.use`/`skill.use`/`plugin.use`, đừng lýt từng permission. **Vì sao?** Một dòng `mcp.use deny github` sạch hơn chục dòng `<server>_<tool>`.
 
 ## Bài tập nhỏ
 

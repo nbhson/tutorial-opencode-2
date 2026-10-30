@@ -34,11 +34,11 @@ npm install -g @opencode/cli
 winget install --id Anomaly.OpenCode -e
 ```
 
-Verify (từ 27/10/2026 phải thấy 2.2.0+):
+Verify (bản mới nhất: 2.2.3, 30/10/2026):
 
 ```bash
 opencode --version
-# -> 2.2.0 (hoặc mới hơn)
+# -> 2.2.3 (hoặc mới hơn)
 ```
 
 Standalone binary (máy không có package manager): tải zip/tar theo platform ở trang docs (darwin-arm64/x64, windows-arm64/x64, linux glibc/musl). Docker: `ghcr.io/anomalyco/opencode:2.0.0` (tag theo version).
@@ -59,13 +59,15 @@ opencode
 opencode upgrade --major
 
 # 3. verify
-opencode --version   # 2.2.0+ (10/2026)
+opencode --version   # 2.2.x (moi nhat 2.2.3 ngay 30/10/2026)
 opencode mcp list    # models/credentials/agents/permissions/MCP con du khong
 ```
 
 Nếu cài v1 bằng package manager (npm/brew/...): **gỡ v1 trước**, vì cả hai dùng chung lệnh `opencode`, không song song mặc định. V2 curl installer sẽ thay binary. mise cần ≥2026.10.9 mới hiểu v2.
 
 Lần đầu mở TUI v2: nó tự migrate settings `tui.json` global + persisted preferences sang `~/.config/opencode/cli.json`, **để nguyên file v1** (không xóa). Project-local client config không migrate (v2 client config là global).
+
+Lưu ý: đã ở line 2.x rồi thì các bản minor **vẫn có breaking nhẹ** — ví dụ 2.2.1 (29/10/2026) bắt đầu yêu cầu TUI plugins dùng **OpenTUI 0.8+**. Sau mỗi lần lên bản, gõ `/highlights` đọc changelog trước khi làm việc tiếp.
 
 ## 3. Cái gì vỡ, cái gì giữ
 

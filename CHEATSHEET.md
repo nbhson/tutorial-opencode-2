@@ -12,7 +12,7 @@
 | Cài v2 (brew) | `brew install anomalyco/tap/opencode-v2` |
 | Cài v2 (npm) | `npm install -g @opencode/cli` |
 | Cài Desktop / WinGet | dmg/deb/rpm/AppImage ở `opencode.ai/v2/docs` · `winget install --id Anomaly.OpenCode -e` |
-| Check version | `opencode --version` → phải là `2.2.x` trở lên (latest 2.2.0 — 27/10/2026) |
+| Check version | `opencode --version` → phải là `2.2.x` trở lên (latest 2.2.3 — 30/10/2026) |
 | Upgrade v1→v2 | lên latest 1.x rồi `opencode upgrade --major` (xóa bản package-manager v1 trước vì chung lệnh `opencode`) |
 | Xem có gì mới | mở TUI → `/highlights` (tắt auto: `"highlights": false` trong `cli.json`) |
 
@@ -47,7 +47,9 @@
 | `Ctrl+X E` / `/editor` | sửa prompt dài trong `$EDITOR` rồi Enter gửi |
 | `/undo` · `/redo` | `undo` lùi thay đổi agent vừa làm (checkpoint), `redo` tiến lại |
 | `/diff` (`f` fullscreen) | `/diff` → xem diff cạnh session đang làm |
-| `/connect` | login provider/Zen/Go ngay trong TUI |
+| `/connect` | login provider/Zen/Go ngay trong TUI; từ v2.2.3 có **Claude Agent** — cài Claude Code + `claude auth login`, chọn Claude Agent để dùng login/models của Claude Code |
+| `/goal` | `/goal "task chỉ xong khi pnpm test xanh"` → session tự làm đến khi đạt objective; `/goal pause` · `/goal resume` · `/goal clear` (từ v2.2.1) |
+| `/schedule` | `/schedule` → đặt prompt chạy định kỳ (opt-in, experimental; từ v2.2.1) |
 | `/mcps` | xem/connect/disconnect/auth MCP servers |
 | `/share` | **đã bỏ** (backend sharing retired từ v1.19.1, v2 không có) |
 | `F2` | xoay model dùng gần đây |
@@ -73,6 +75,8 @@
   "plugins": ["opencode-acme-plugin"]
 }
 ```
+
+> Từ v2.2.2: tool `experimental_image_generate` **bật mặc định** khi provider kết nối hỗ trợ image models — chọn model qua `experimental.image_generate.model`. Policies chặn dùng plugin/skill/MCP: từ v2.2.3 có action riêng `plugin.use` / `skill.use` / `mcp.use` (`integration.use` chỉ còn điều khiển integrations).
 
 | File | Scope |
 |---|---|
@@ -140,6 +144,7 @@
 | Cách trả | Khi nào dùng |
 |---|---|
 | BYOK (key của bạn) | `opencode auth login` → trả provider trực tiếp, không markup |
+| Claude Agent (v2.2.3) | đã có subscription Claude Code → cài Claude Code + `claude auth login`, chọn **Claude Agent** trong `/connect` |
 | Go $10/tháng · Go Plus $40/tháng | curated catalog (GLM/Kimi/DeepSeek/MiniMax + Grok/Claude Haiku...), khác nhau ở hạn mức $/model/tháng |
 | Zen pay-as-you-go | `opencode Zen` gateway, `opencode/<model>`, per-1M-tokens, có model Free, set spend limit + auto-reload |
 

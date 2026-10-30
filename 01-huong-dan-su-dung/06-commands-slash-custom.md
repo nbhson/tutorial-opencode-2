@@ -140,6 +140,13 @@ JSON cần `template`; markdown không cần (body chính là template). Markdow
 - Chỉ file `.md` được discovery; thư mục `command/` số ít (legacy) vẫn được đọc nhưng dùng `commands/` cho file mới.
 - Path lồng nhau thành tên lồng: `.opencode/commands/team/review.md` → gọi `/team/review src/auth.ts`.
 
+### 6. Built-in commands mới (2.2.1+): `/goal` + `/schedule`
+
+Ngoài slash command tự viết, v2.2.1 thêm 2 lệnh built-in đáng nhớ:
+
+- `/goal <mục tiêu>` — đặt mục tiêu **xuyên turn**: agent tự làm tiếp qua nhiều lượt đến khi đạt điều kiện hoàn thành; pause/resume/clear để điều khiển vòng đời của goal. Hợp task dài kiểu "chạy đến khi toàn bộ test xanh".
+- `/schedule` — scheduled prompts (**opt-in**): lên lịch prompt chạy định kỳ (cron-style) không cần người ngồi. Tính năng experimental; từ 2.2.3, Code Mode script trong schedule được kiểm tra tĩnh trước — schedule sai sẽ fail ngay lúc tạo thay vì chạy hỏng âm thầm. (verify 30/10/2026 — changelog v2.2.1/v2.2.3)
+
 ## Luồng hoạt động
 
 1. **Viết file** `.opencode/commands/<ten>.md` — Lỗi hay gặp: đặt trong `command/` (số ít, legacy vẫn đọc nhưng đừng dùng mới).

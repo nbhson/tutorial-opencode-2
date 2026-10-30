@@ -127,7 +127,7 @@ opencode run --model anthropic/claude-sonnet-5-5 "Refactor parseToken"
 ```
 
 1. Export key trong shell profile hoặc file env riêng.
-2. `/connect` nếu muốn đăng nhập tương tác (provider catalog, Console, Go).
+2. `/connect` nếu muốn đăng nhập tương tác (provider catalog, Console, Go). Từ v2.2.3 có provider **Claude Agent** builtin: cài Claude Code, chạy `claude auth login`, rồi chọn **Claude Agent** trong `/connect` — dùng login + models của Claude Code subscription, không cần API key riêng (`OPENCODE_CLAUDE_PATH` override đường dẫn executable).
 3. `/models` xác nhận model đã hiện.
 
 **Nếu vẫn lỗi:** `{env:NAME}` biến không set sẽ thành **chuỗi rỗng** (không lỗi to) — model "biến mất" thường là do key rỗng, không phải do catalog.

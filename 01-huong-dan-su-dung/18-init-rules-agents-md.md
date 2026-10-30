@@ -93,9 +93,6 @@ my-project/
 ```
 
 **Vì sao quan trọng?** Cơ chế "lazy load theo vùng đọc" chính là cách monorepo tránh nhồi cả nghìn dòng luật của mọi package vào context ngay từ đầu — chỉ luật của vùng agent đang đụng tới mới nạp.
-**Nếu làm sai?** Nhồi mọi luật vào 1 file root cho monorepo → context phình, luật của service A ám ảnh agent đang làm service B; hoặc đặt luật sai thư mục → agent làm việc ngoài vùng đó không bao giờ thấy.
-
-**Vì sao quan trọng?** Đây là cơ chế tiết kiệm context: luật đi theo vùng code thay vì nạp hết từ đầu.
 **Nếu làm sai?** Đặt luật "luôn chạy `bun test` trước khi commit" trong `packages/web/AGENTS.md` nhưng agent chủ yếu làm việc ở `packages/api` — luật đó sẽ không bao giờ được nạp.
 
 ### 4. `instructions[]`: nạp thêm file ngoài `AGENTS.md`
